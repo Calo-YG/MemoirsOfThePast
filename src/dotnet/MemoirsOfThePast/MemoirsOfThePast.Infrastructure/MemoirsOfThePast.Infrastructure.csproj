@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>disable</Nullable>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="9.0.0" />
+		<PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.0.0-preview.251028.1" />
+		<PackageReference Include="Microsoft.Agents.AI.Workflows" Version="1.0.0-preview.251105.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="EntityFrameworkCore\" />
+	  <Folder Include="Backgrounds\" />
+	</ItemGroup>
+</Project>
