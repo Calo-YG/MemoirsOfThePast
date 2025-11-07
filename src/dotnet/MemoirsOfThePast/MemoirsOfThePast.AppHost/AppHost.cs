@@ -1,5 +1,5 @@
 var builder = DistributedApplication.CreateBuilder(args);
 
-builder.AddProject<Projects.WebApplication1>("webapplication1");
+builder.AddProject<Projects.MemoirsOfThePast_HoST>("MemoirsOfThePast");
 
 builder.Build().Run();

@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36518.9 d17.14
+VisualStudioVersion = 17.14.36518.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoirsOfThePast.HoST", "WebApplication1\MemoirsOfThePast.HoST.csproj", "{1139E486-A36B-6B58-4965-3753D45010A4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoirsOfThePast.Host", "WebApplication1\MemoirsOfThePast.Host.csproj", "{1139E486-A36B-6B58-4965-3753D45010A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MemoirsOfThePast.AppHost", "MemoirsOfThePast.AppHost\MemoirsOfThePast.AppHost.csproj", "{5B2061EE-FB68-4439-8E75-68BABE5DC3D2}"
 EndProject

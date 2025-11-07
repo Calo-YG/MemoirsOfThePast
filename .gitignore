@@ -53,3 +53,5 @@ CodeCoverage/
 TestResult.xml
 nunit-*.xml
 /src/dotnet/MemoirsOfThePast/.vs/MemoirsOfThePast
+/src/dotnet/MemoirsOfThePast/.idea/.idea.MemoirsOfThePast/.idea
+/src/dotnet/MemoirsOfThePast/.vs/ProjectEvaluation

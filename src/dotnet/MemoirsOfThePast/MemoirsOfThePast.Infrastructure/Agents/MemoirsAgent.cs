@@ -1,6 +1,9 @@
 ﻿namespace MemoirsOfThePast.Infrastructure.Agents
 {
-    internal class MemoirsAgent
+    /// <summary>
+    /// 会议agent  
+    /// </summary>
+    public class MemoirsAgent
     {
     }
 }
