@@ -5,5 +5,19 @@
     /// </summary>
     public  class ChatHistoryEntity
     {
+        /// <summary>
+        /// id
+        /// </summary>
+        public string Id { get; set; }
+
+        /// <summary>
+        /// 会话id
+        /// </summary>
+        public string SessionId { get; set; }
+
+        /// <summary>
+        /// 角色
+        /// </summary>
+        public string Role { get; set; }
     }
 }

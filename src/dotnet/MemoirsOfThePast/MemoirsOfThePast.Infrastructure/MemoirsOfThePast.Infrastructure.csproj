@@ -8,8 +8,10 @@
 
 	<ItemGroup>
 		<PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="9.0.0" />
-		<PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.0.0-preview.251028.1" />
-		<PackageReference Include="Microsoft.Agents.AI.Workflows" Version="1.0.0-preview.251105.1" />
+		<PackageReference Include="Microsoft.Agents.AI.Hosting" Version="1.0.0-preview.251107.1" />		
+		<PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.0.0-preview.251107.1" />
+		<PackageReference Include="Scalar.AspNetCore" Version="2.7.0" />
+		<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.4" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="9.0.10">
 		  <PrivateAssets>all</PrivateAssets>

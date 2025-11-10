@@ -1,9 +1,9 @@
 ﻿namespace MemoirsOfThePast.Infrastructure.Domain
 {
     /// <summary>
-    /// 情绪分析结果
+    /// 
     /// </summary>
-    public class AnalysisResultEntity
+    public class ChatSettingEntity
     {
     }
 }
