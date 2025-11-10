@@ -66,6 +66,7 @@ var app = builder.Build();
 
 app.UseCors(cors);
 
+app.UseAuthorization();
 app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
