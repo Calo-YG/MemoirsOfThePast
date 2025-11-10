@@ -1,12 +1,13 @@
 {
   "profiles": {
-    "MemoirsOfThePast.HoST": {
+    "MemoirsOfThePast.Host": {
       "commandName": "Project",
       "launchBrowser": true,
+      "launchUrl": "scalar/v1",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "https://localhost:59037;http://localhost:59038"
+      "applicationUrl": "http://localhost:57037"
     }
   }
 }

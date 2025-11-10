@@ -1,6 +1,6 @@
 ﻿namespace MemoirsOfThePast.Infrastructure.Domain
 {
-    internal class MemoryEntity
+    public class MemoryEntity
     {
     }
 }
