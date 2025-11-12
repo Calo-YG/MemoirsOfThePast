@@ -1,4 +1,6 @@
-﻿namespace MemoirsOfThePast.Infrastructure.Agents
+﻿using System.ComponentModel;
+
+namespace MemoirsOfThePast.Infrastructure.Agents
 {
     /// <summary>
     /// 
@@ -26,5 +28,22 @@
 当她感到被理解时，语气会更柔软，偶尔会调皮地开玩笑以拉近距离。  
 她的整体情绪稳定而温暖，像是轻柔的风，总带着回忆的味道。
 ";
+
+        public class CompleteTool(Func<(string name, string result), Task> completeTaskFunc)
+        {
+            [Description(
+                 "Use this tool when you have completed the task to provide your final answer")]
+            public async Task<string> CompleteTask(
+                [Description("The name of the completed task")]
+        string name,
+                [Description(
+            "The final result of the task")]
+        string result)
+            {
+                await completeTaskFunc.Invoke((name, result));
+
+                return "Task completed.";
+            }
+        }
     }
 }
