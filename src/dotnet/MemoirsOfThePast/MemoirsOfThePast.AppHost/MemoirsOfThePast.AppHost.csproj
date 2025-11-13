@@ -15,7 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebApplication1\MemoirsOfThePast.HoST.csproj" />
+    <ProjectReference Include="..\MomoirsOfThePast.Host\MemoirsOfThePast.HoST.csproj" />
   </ItemGroup>
 
 </Project>

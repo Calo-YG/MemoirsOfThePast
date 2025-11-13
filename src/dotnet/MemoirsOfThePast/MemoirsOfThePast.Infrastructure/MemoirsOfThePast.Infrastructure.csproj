@@ -6,6 +6,12 @@
     <Nullable>disable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="新文件夹\**" />
+    <EmbeddedResource Remove="新文件夹\**" />
+    <None Remove="新文件夹\**" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Agents.AI.Hosting" Version="1.0.0-preview.251107.1" />		
