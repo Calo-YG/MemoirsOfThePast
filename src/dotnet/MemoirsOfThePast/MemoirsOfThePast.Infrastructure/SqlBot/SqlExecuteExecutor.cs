@@ -3,8 +3,14 @@ using Microsoft.Extensions.AI;
 
 namespace MemoirsOfThePast.Infrastructure.SqlBot
 {
-    internal class SqlExecuteExecutor() : Executor<ChatMessage, string>("SqlExecuteExecutor")
+    /// <summary>
+    /// chat client 客户端
+    /// </summary>
+    /// <param name="chatClient"></param>
+    public class SqlExecuteExecutor(IChatClient chatClient) : Executor<ChatMessage, string>("SqlExecuteExecutor")
     {
+        private const string Prompt = $"";
+
         /// <summary>
         /// 
         /// </summary>

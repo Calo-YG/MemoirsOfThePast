@@ -1,18 +1,17 @@
 using MemoirsOfThePast.Infrastructure.Agents;
 using MemoirsOfThePast.Infrastructure.Core;
 using MemoirsOfThePast.Infrastructure.Options;
+using MemoirsOfThePast.Infrastructure.SqlBot;
+using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotEvent;
 using MemoirsOfThePast.Infrastructure.Tools;
 using Microsoft.Agents.AI.Hosting;
 using Microsoft.Agents.AI.Workflows;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using OpenAI;
-using OpenAI.Chat;
 using Scalar.AspNetCore;
 using System.ClientModel;
-using System.Text;
 using static MemoirsOfThePast.Infrastructure.AgentFrameworkSample.AgentExecutor;
-using static MemoirsOfThePast.Infrastructure.Agents.MemoirsAgent;
 using DateTimeConverter = MemoirsOfThePast.Infrastructure.Core.DateTimeConverter;
 
 var builder = WebApplication.CreateSlimBuilder(args);
@@ -173,6 +172,24 @@ app.MapPost("agent/executor",async (IChatClient chatClient) =>
         if (evt is WorkflowOutputEvent outputEvent)
         {
             Console.WriteLine($"{outputEvent}");
+        }
+    }
+});
+
+app.MapPost("agent/sqlbot/executor", async (IChatClient chatClient,ILoggerFactory loggerFactory) =>
+{
+    var sqlmessageAnalyse = new SqlMessageAnalyzeExecutor("SqlMessageAnalyzeExecutor", chatClient, loggerFactory);
+
+    var workflow = new WorkflowBuilder(sqlmessageAnalyse)
+    .Build();
+
+    await using StreamingRun run = await InProcessExecution.StreamAsync(workflow, input: "select * form user group by userId ∞ÔŒ“∑÷Œˆ’‚∂Œsql");
+
+    await foreach (WorkflowEvent evt in run.WatchStreamAsync())
+    {
+        if(evt is SqlMessageAnalyseEvent @event)
+        {
+            var cev = @event;
         }
     }
 });
