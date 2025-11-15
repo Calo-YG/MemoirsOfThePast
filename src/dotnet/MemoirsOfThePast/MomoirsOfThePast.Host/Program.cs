@@ -151,6 +151,13 @@ builder.Services.AddAIAgent(SqlPerformanceExecutor.AgentName, (sp, s) =>
 
     return SqlAgent.CreatePerformanceAIAgent(chatClient, loggerFactory);
 });
+builder.Services.AddAIAgent(SqlGenerateExecutor.AgentName, (sp, s) =>
+{
+    var chatClient = sp.GetRequiredService<IChatClient>();
+    var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+
+    return SqlAgent.CreateGenereateAIAgent(chatClient, loggerFactory);
+});
 #endregion
 var app = builder.Build();
 

@@ -1,11 +1,9 @@
-﻿using MemoirsOfThePast.Infrastructure.Options;
-using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotExecutor;
+﻿using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotExecutor;
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace MemoirsOfThePast.Infrastructure.SqlBot
 {
@@ -13,16 +11,11 @@ namespace MemoirsOfThePast.Infrastructure.SqlBot
     /// <param name="sqlMessageAnalyzeAgent">
     /// SqlMessageAnalyzeAgent
     /// </param>
-    public class SqlAgent(IOptionsSnapshot<DbOptions> options,ILoggerFactory loggerFactory,
+    public class SqlAgent(ILoggerFactory loggerFactory,
         [FromKeyedServices(SqlMessageAnalyzeExecutor.AgentName)] AIAgent sqlMessageAnalyzeAgent,
         [FromKeyedServices(SqlErrorAmendExecutor.AgentName)] AIAgent sqlErrorAmendAgent,
         [FromKeyedServices(SqlPerformanceExecutor.AgentName)] AIAgent sqlPerfomanceAgent) : ISqlAgent
     {
-        /// <summary>
-        /// 数据库连接设置
-        /// </summary>
-        private readonly DbOptions dbOptions = options.Value;
-
         /// <summary>
         /// sql 语义分析助手
         /// </summary>
@@ -111,6 +104,23 @@ namespace MemoirsOfThePast.Infrastructure.SqlBot
                 Instructions = SqlPerformanceExecutor.Prompt,
                 Description = SqlPerformanceExecutor.Descriptor,
                 Name = SqlPerformanceExecutor.AgentName
+            };
+            return chatClient.CreateAIAgent(options: chatClientOptions, loggerFactory: loggerFactory);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="chatClient"></param>
+        /// <param name="loggerFactory"></param>
+        /// <returns></returns>
+        public static AIAgent CreateGenereateAIAgent(IChatClient chatClient, ILoggerFactory loggerFactory)
+        {
+            var chatClientOptions = new ChatClientAgentOptions()
+            {
+                Instructions = SqlGenerateExecutor.Prompt,
+                Description = SqlGenerateExecutor.Descriptor,
+                Name = SqlGenerateExecutor.AgentName
             };
             return chatClient.CreateAIAgent(options: chatClientOptions, loggerFactory: loggerFactory);
         }
