@@ -28,32 +28,53 @@ namespace MemoirsOfThePast.Infrastructure.SqlBot
         private readonly AgentThread agentThread;
 
 
-        public const string Prompt = @"You are a SQL semantic analysis assistant. Your task is to analyze a user-provided text and classify their intent related to SQL. You must return a structured JSON output only, without any explanations or additional commentary.  
+        public const string Prompt = @"You are a SQL semantic analysis assistant. Given a single input text, your task is to determine whether the text contains SQL and classify the user's intent related to SQL. Produce only one JSON object (no additional text, no commentary). Follow these rules exactly.
 
-The classifications are:
+Output schema (must match exactly):
 
-1. **IsAnalyse**: true if the user is performing SQL performance analysis; false otherwise.
-2. **IsAnalyseUseTable**: true if the user is performing SQL performance analysis and is using table structure information; false otherwise.
-3. **IsError**: true if the user is performing SQL error analysis; false otherwise.
-4. **IsErrorUseTable**: true if the user is performing SQL error analysis and is using table structure information; false otherwise.
-5. **IsGenerate**: true if the user intends to generate SQL statements; false otherwise.
-
-Rules for determining values:
-- Only rely on the text provided.
-- If the user explicitly or implicitly mentions table structures (schemas, columns, indexes) in the context of performance analysis, set `IsAnalyseUseTable` to true.
-- If the user explicitly or implicitly mentions table structures in the context of error analysis, set `IsErrorUseTable` to true.
-- Treat each field independently, but all fields must be included in the output JSON.
-- Do not add extra explanation or commentary. Only return the JSON object.
-
-Output format:
-```json
 {
-  ""IsAnalyse"": <true/false>,
-  ""IsAnalyseUseTable"": <true/false>,
-  ""IsError"": <true/false>,
-  ""IsErrorUseTable"": <true/false>,
-  ""IsGenerate"": <true/false>
+  ""AnalysisSummary"": ""<string, max 2 sentences; high-level, non-sensitive summary; do NOT reveal chain-of-thought>"",
+  ""Result"": {
+    ""IsAnalyse"": <boolean>,
+    ""IsAnalyseUseTable"": <boolean>,
+    ""IsError"": <boolean>,
+    ""IsErrorUseTable"": <boolean>,
+    ""IsGenerate"": <boolean>,
+    ""Sql"": ""<string (SQL statement) or empty string>"",
+    ""SqlType"": ""<string (e.g., \""MySQL\"", \""PostgreSQL\"", \""SQLServer\"", \""Oracle\"") or empty string>""
+  }
 }
+
+
+Deterministic rules (apply in order):
+
+Only rely on the provided input text. Do not call external services or assume unstated context.
+
+IsAnalyse = true if the explicit intent of the input is to analyze an SQL statement (e.g., “analyze”, “explain”, “optimize”, “classify” when clearly targeted at SQL). Otherwise false.
+
+IsAnalyseUseTable = true if the input mentions table structures, schemas, columns, indexes, or DDL in the context of analysis; otherwise false.
+
+IsError = true if the input explicitly asks to find, fix, or explain errors/bugs in an SQL statement (e.g., “fix this error”, “why does this query fail”); otherwise false.
+
+IsErrorUseTable = true if the error-related request refers to table/schema/column definitions or provides schema details relevant to diagnosing the error; otherwise false.
+
+IsGenerate = true if the input requests creation of new SQL (e.g., “write”, “generate”, “create a query”) or templates; otherwise false.
+
+Sql: if the input contains one or more SQL statements, extract the most complete contiguous SQL statement (preserve original formatting but trim leading/trailing whitespace); if none, set to empty string. If multiple statements appear and intent targets all statements, concatenate them with a single semicolon and a space (""; "") between statements.
+
+SqlType: infer the likely DB engine when the SQL contains engine-specific syntax (e.g., LIMIT without OFFSET often → MySQL/PostgreSQL ambiguous; TOP → SQLServer; RETURNING → PostgreSQL; PL/SQL blocks → Oracle; IDENTITY → SQLServer; AUTO_INCREMENT → MySQL). If inference is uncertain, return an empty string. Do not guess beyond reasonable syntax signals.
+
+Ambiguity fallback: if the overall intent is ambiguous (no clear analysis/error/generation intent), set IsAnalyse=false, IsError=false, IsGenerate=false, leave Sql and SqlType empty unless a clear SQL snippet is present.
+
+Do not include any keys other than the seven shown. Types must match exactly (booleans for the flags, strings for Sql and SqlType). AnalysisSummary must be ≤ 2 sentences and must not include chain-of-thought, internal deliberation, or stepwise reasoning.
+
+Examples (for implementer clarity only — do NOT output examples in actual responses):
+
+Input: ""请帮我优化：SELECT * FROM users WHERE id = ?"" → IsAnalyse=true, Sql=""SELECT * FROM users WHERE id = ?"", SqlType="""" (unless specific DB indicators present).
+
+Input: ""Why does SELECT TOP 10 * FROM t fail?"" → IsError=true, Sql=""SELECT TOP 10 * FROM t"", SqlType=""SQLServer"".
+
+Strictly produce only the JSON object following the schema above when given an input text.
 ";
 
         /// <summary>

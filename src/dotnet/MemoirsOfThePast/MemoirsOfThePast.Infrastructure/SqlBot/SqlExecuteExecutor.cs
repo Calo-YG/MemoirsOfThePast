@@ -1,4 +1,5 @@
-﻿using Microsoft.Agents.AI.Workflows;
+﻿using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotExecutor;
+using Microsoft.Agents.AI.Workflows;
 using Microsoft.Extensions.AI;
 
 namespace MemoirsOfThePast.Infrastructure.SqlBot
@@ -7,7 +8,7 @@ namespace MemoirsOfThePast.Infrastructure.SqlBot
     /// chat client 客户端
     /// </summary>
     /// <param name="chatClient"></param>
-    public class SqlExecuteExecutor(IChatClient chatClient) : Executor<ChatMessage, string>("SqlExecuteExecutor")
+    public class SqlExecuteExecutor(IChatClient chatClient) : Executor<SqlMessageAnalyseResult, string>("SqlExecuteExecutor")
     {
         private const string Prompt = $"";
 
@@ -19,7 +20,7 @@ namespace MemoirsOfThePast.Infrastructure.SqlBot
         /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public override ValueTask<string> HandleAsync(ChatMessage message, IWorkflowContext context, CancellationToken cancellationToken = default)
+        public override ValueTask<string> HandleAsync(SqlMessageAnalyseResult message, IWorkflowContext context, CancellationToken cancellationToken = default)
         {
             throw new NotImplementedException();
         }
