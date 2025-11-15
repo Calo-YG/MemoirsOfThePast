@@ -29,5 +29,10 @@
         /// 是否生成 sql 语句
         /// </summary>
         public bool IsGenerate { get; set; }
+
+        /// <summary>
+        /// 用户message
+        /// </summary>
+        public string Message { get; set; }
     }
 }

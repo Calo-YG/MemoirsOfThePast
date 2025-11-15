@@ -2,7 +2,6 @@
 using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotExecutor;
 using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Workflows;
-using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
 
@@ -13,11 +12,6 @@ namespace MemoirsOfThePast.Infrastructure.SqlBot
     /// </summary>
     public sealed class SqlMessageAnalyzeExecutor : Executor<string, SqlMessageAnalyseResult>
     {
-        /// <summary>
-        /// chatCliennt 客户端
-        /// </summary>
-        private readonly IChatClient _chatClient;
-
         /// <summary>
         /// 构建ai agent
         /// </summary>
@@ -33,7 +27,8 @@ namespace MemoirsOfThePast.Infrastructure.SqlBot
         /// </summary>
         private readonly AgentThread agentThread;
 
-        private const string Prompt = @"You are a SQL semantic analysis assistant. Your task is to analyze a user-provided text and classify their intent related to SQL. You must return a structured JSON output only, without any explanations or additional commentary.  
+
+        public const string Prompt = @"You are a SQL semantic analysis assistant. Your task is to analyze a user-provided text and classify their intent related to SQL. You must return a structured JSON output only, without any explanations or additional commentary.  
 
 The classifications are:
 
@@ -61,21 +56,20 @@ Output format:
 }
 ";
 
-        public SqlMessageAnalyzeExecutor(string id,IChatClient chatClient,ILoggerFactory loggerFactory):base(id) 
+        /// <summary>
+        /// agent name
+        /// </summary>
+        public const string AgentName = @"sqlanalyse";
+
+        /// <summary>
+        ///  agent descriptor 
+        /// </summary>
+        public const string Descriptor = "You are a SQL semantic analysis assistant. Your task is to analyze a user-provided text and classify their intent related to SQL. You must return a structured JSON output only, without any explanations or additional commentary.";
+
+        public SqlMessageAnalyzeExecutor(string id, AIAgent aIAgent, ILogger<SqlMessageAnalyzeExecutor> logger):base(id) 
         { 
-            _chatClient = chatClient;
-            _logger = loggerFactory.CreateLogger<SqlMessageAnalyzeExecutor>();
-            var chatClientOptions = new ChatClientAgentOptions()
-            {
-               Instructions = Prompt,
-               Description = "You are a SQL semantic analysis assistant. Your task is to analyze a user-provided text and classify their intent related to SQL. You must return a structured JSON output only, without any explanations or additional commentary.",
-               Name = "sqlanalyse",
-                ChatOptions = new()
-                {
-                    ResponseFormat = ChatResponseFormat.ForJsonSchema<SqlMessageAnalyseResult>()
-                }
-            };
-            aIAgent = chatClient.CreateAIAgent(options:chatClientOptions,loggerFactory:loggerFactory);
+            this.aIAgent = aIAgent;
+            this._logger = logger;
             agentThread = aIAgent.GetNewThread();
         }
 
@@ -94,7 +88,7 @@ Output format:
 
             var sloganResult = JsonSerializer.Deserialize<SqlMessageAnalyseResult>(result.Text) ?? throw new InvalidOperationException("Failed to deserialize SqlMessageAnalyseResult result.");
 
-            _logger.LogInformation("Agent Output");
+            _logger.LogInformation($"Agent Output:{result.Text}");
 
             await context.AddEventAsync(new SqlMessageAnalyseEvent(sloganResult), cancellationToken);
 

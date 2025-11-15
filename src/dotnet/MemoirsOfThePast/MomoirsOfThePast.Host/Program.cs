@@ -4,6 +4,7 @@ using MemoirsOfThePast.Infrastructure.Options;
 using MemoirsOfThePast.Infrastructure.SqlBot;
 using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotEvent;
 using MemoirsOfThePast.Infrastructure.Tools;
+using Microsoft.Agents.AI;
 using Microsoft.Agents.AI.Hosting;
 using Microsoft.Agents.AI.Workflows;
 using Microsoft.Extensions.AI;
@@ -126,7 +127,15 @@ builder.AddWorkflow("HG", (sp, s) =>
 
 #region ≈‰÷√agent
 
+builder.Services.AddTransient<ISqlAgent, SqlAgent>();
 //ilder.AddAIAgent("DefaultChatAgent",);
+builder.Services.AddAIAgent(SqlMessageAnalyzeExecutor.AgentName, (sp, s) =>
+{
+    var chatClient = sp.GetRequiredService<IChatClient>();
+    var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+
+    return SqlAgent.CreateMessageAnalyzeAIAgent(chatClient,loggerFactory);
+});
 #endregion
 var app = builder.Build();
 
@@ -176,12 +185,9 @@ app.MapPost("agent/executor",async (IChatClient chatClient) =>
     }
 });
 
-app.MapPost("agent/sqlbot/executor", async (IChatClient chatClient,ILoggerFactory loggerFactory) =>
+app.MapPost("agent/sqlbot/executor", async (ISqlAgent sqlAgent) =>
 {
-    var sqlmessageAnalyse = new SqlMessageAnalyzeExecutor("SqlMessageAnalyzeExecutor", chatClient, loggerFactory);
-
-    var workflow = new WorkflowBuilder(sqlmessageAnalyse)
-    .Build();
+    var workflow = sqlAgent.CreateWorkflow();
 
     await using StreamingRun run = await InProcessExecution.StreamAsync(workflow, input: "select * form user group by userId ∞ÔŒ“∑÷Œˆ’‚∂Œsql");
 

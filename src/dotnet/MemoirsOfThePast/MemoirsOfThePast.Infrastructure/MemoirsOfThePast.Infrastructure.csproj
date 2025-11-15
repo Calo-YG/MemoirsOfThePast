@@ -13,6 +13,7 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<PackageReference Include="Dapper" Version="2.1.66" />
 		<PackageReference Include="Lib.AspNetCore.ServerSentEvents" Version="9.0.0" />
 		<PackageReference Include="Microsoft.Agents.AI.Hosting" Version="1.0.0-preview.251107.1" />		
 		<PackageReference Include="Microsoft.Agents.AI.OpenAI" Version="1.0.0-preview.251107.1" />
