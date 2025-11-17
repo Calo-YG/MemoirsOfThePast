@@ -26,9 +26,11 @@
 		</PackageReference>
 		<PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.10" />
 		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+		<PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.14.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <Folder Include="AgentMiddleware\" />
 	  <Folder Include="Backgrounds\" />
 	  <Folder Include="Executors\" />
 	</ItemGroup>

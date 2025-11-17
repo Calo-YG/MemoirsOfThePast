@@ -1,9 +1,9 @@
 ﻿namespace MemoirsOfThePast.Infrastructure.Domain
 {
     /// <summary>
-    /// 回忆实体
+    /// 回忆碎片
     /// </summary>
-    public class MemoryEntity
+    public class FragmentEntity
     {
         /// <summary>
         /// 主键
@@ -11,34 +11,29 @@
         public string Id { get; set; }
 
         /// <summary>
-        /// 用户id
+        /// 回忆id
         /// </summary>
-        public string UserId { get; set; }
+        public string MemoryId { get; set; }
 
         /// <summary>
-        /// 对话人物名称
-        /// </summary>
-        public string Name { get; set; }
-
-        /// <summary>
-        /// 描述
+        /// 回忆藐视
         /// </summary>
         public string Description { get; set; }
 
         /// <summary>
-        /// 头像
+        /// 发生时间
         /// </summary>
-        public string Avatar { get; set; }
+        public DateTime OccurDate { get; set; }
 
         /// <summary>
-        /// 描述
+        /// 地点
         /// </summary>
-        public string Background { get; set; }
+        public string Location { get; set; }
 
         /// <summary>
-        /// 可空（构建回忆后定时任务生成）
+        /// 场景
         /// </summary>
-        public string Prompt { get; set; }
+        public string Scene { get; set; }
 
         /// <summary>
         /// 创建时间

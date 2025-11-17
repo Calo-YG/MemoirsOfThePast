@@ -1,18 +1,14 @@
-using MemoirsOfThePast.Infrastructure.Agents;
 using MemoirsOfThePast.Infrastructure.Core;
 using MemoirsOfThePast.Infrastructure.Options;
 using MemoirsOfThePast.Infrastructure.SqlBot;
 using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotEvent;
-using MemoirsOfThePast.Infrastructure.Tools;
 using Microsoft.Agents.AI.Hosting;
 using Microsoft.Agents.AI.Workflows;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using OpenAI;
 using Scalar.AspNetCore;
 using System.ClientModel;
-using System.Text;
 using static MemoirsOfThePast.Infrastructure.AgentFrameworkSample.AgentExecutor;
 using DateTimeConverter = MemoirsOfThePast.Infrastructure.Core.DateTimeConverter;
 
@@ -93,37 +89,6 @@ builder.Services.AddSingleton<IChatClient>(sp =>
 });
 
 //builder.AddAIAgent("Marry",in)
-
-builder.AddWorkflow("Pinner", (sp, s) =>
-{
-    AITool[] tools =
-    [
-        AIFunctionFactory.Create(TaskTool.StepTask, new AIFunctionFactoryOptions { Name="Step" }),
-        AIFunctionFactory.Create(TaskTool.CompleteTask,new AIFunctionFactoryOptions { Name="Step" })
-    ];
-    var chatClient = sp.GetRequiredService<IChatClient>();
-    var memoryAgent = chatClient.CreateAIAgent(name: "Marry", instructions: MemoirsAgent.Prompt, description: "人格分析器", tools: tools);
-    var generateAgent = chatClient.CreateAIAgent(name: "Dency", instructions: PromptGenerateAgent.Prompt, description: "人格设定生成器", tools: tools);
-
-    return AgentWorkflowBuilder.BuildSequential("Pinner", [memoryAgent, generateAgent]);
-});
-
-builder.AddWorkflow("HG", (sp, s) =>
-{
-    AITool[] tools =
-    [
-        AIFunctionFactory.Create(TaskTool.StepTask, new AIFunctionFactoryOptions { Name="Step" }),
-        AIFunctionFactory.Create(TaskTool.CompleteTask,new AIFunctionFactoryOptions { Name="Step" })
-    ];
-    var chatClient = sp.GetRequiredService<IChatClient>();
-    var memoryAgent = chatClient.CreateAIAgent(name: "Marry", instructions: MemoirsAgent.Prompt, description: "人格分析器", tools: tools);
-    var generateAgent = chatClient.CreateAIAgent(name: "Dency", instructions: PromptGenerateAgent.Prompt, description: "人格设定生成器", tools: tools);
-    var htmlAgent = chatClient.CreateAIAgent(name: "ht", instructions: HtmlAgent.Prompt);
-
-    var builder = AgentWorkflowBuilder.BuildSequential("HG", [memoryAgent, generateAgent, htmlAgent]);
-
-    return builder;
-});
 #endregion
 
 #region 配置agent

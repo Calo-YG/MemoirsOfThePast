@@ -52,5 +52,31 @@
         /// 数据库类型
         /// </summary>
         public string SqlType { get; set; }
+
+        /// <summary>
+        /// 查询所用的表
+        /// </summary>
+        public List<string> Tables { get; set; }
+
+        /// <summary>
+        /// 列信息
+        /// </summary>
+        public List<string> Columns { get; set; }
+    }
+
+    /// <summary>
+    /// 列信息
+    /// </summary>
+    public sealed class ColumnInfo
+    {
+        /// <summary>
+        /// 表格信息
+        /// </summary>
+        public string TableName { get; set; }
+
+        /// <summary>
+        /// 列名
+        /// </summary>
+        public string ColumnName { get; set; }
     }
 }

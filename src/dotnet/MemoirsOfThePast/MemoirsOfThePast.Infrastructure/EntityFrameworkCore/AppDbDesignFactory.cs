@@ -6,11 +6,11 @@ using Microsoft.Extensions.Options;
 
 namespace SpeakEase.Gateway.Infrastructure.EntityFrameworkCore
 {
-    internal class SpeakEaseDesignFactory: IDesignTimeDbContextFactory<AppDbContext>
+    internal class AppDbDesignFactory: IDesignTimeDbContextFactory<AppDbContext>
     {
         public AppDbContext CreateDbContext(string[] args)
         {
-            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "MemoirsOfThePast.Host/Configuration");
+            var basePath = Path.Combine(Directory.GetCurrentDirectory(), "..", "MemoirsOfThePast.Host");
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(basePath)
@@ -22,7 +22,7 @@ namespace SpeakEase.Gateway.Infrastructure.EntityFrameworkCore
                 //.AddCommandLine(args)
                 .Build();
 
-            var connection = "User ID=postgres;Password=wyg154511;Host=117.72.66.170;Port=5432;Database=speakease_gateway;Pooling=true;";
+            var connection = "User ID=postgres;Password=wyg154511;Host=117.72.66.170;Port=5432;Database=memoryofthepast;Pooling=true;";
 
             var options = new OptionsWrapper<DbContextOptions<AppDbContext>>(new DbContextOptionsBuilder<AppDbContext>()
                 .UseNpgsql(connection)
