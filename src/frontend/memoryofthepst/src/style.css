@@ -1,0 +1,130 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  /* 允许浏览器原生控件跟随主题 */
+  color-scheme: light dark;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* 全局主题变量（默认：亮色） */
+  --bg: #f6f7f9;
+  --card: #ffffff;
+  --line: #e9edf2;
+  --text: #1f2937;
+  --text-weak: #6b7280;
+  --brand: #42b883;
+  --brand-weak: rgba(66, 184, 131, 0.12);
+}
+
+/* 暗色主题覆盖（优先级更高，匹配 :root[data-theme='dark']） */
+:root[data-theme='dark'] {
+  --bg: #0f1217;
+  --card: #131822;
+  --line: #1f2530;
+  --text: #e5e7eb;
+  --text-weak: #9aa1ab;
+  --brand: #42b883;
+  --brand-weak: rgba(66, 184, 131, 0.18);
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+.card {
+  padding: 2em;
+}
+
+#app {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+/* 视口单位自适配增强：避免移动端地址栏导致的高度跳变 */
+@supports (height: 100svh) {
+  #app { min-height: 100svh; }
+}
+@supports (height: 100dvh) {
+  #app { min-height: 100dvh; }
+}
+
+/* viewport fit: 保证 #app 宽高自适应屏幕 */
+html, body, #app {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* 以 min-height 填满视口高度，避免 100% 受父元素高度限制 */
+html, body, #app {
+  min-height: 100vh;
+}
+
+/* 现代移动端优先使用 100dvh/100svh，避免地址栏导致的高度跳变 */
+@supports (height: 100dvh) {
+  html, body, #app { min-height: 100dvh; }
+}
+@supports (height: 100svh) {
+  html, body, #app { min-height: 100svh; }
+}
+
+/* 防横向滚动条抖动 */
+html, body {
+  overflow-x: hidden;
+}
