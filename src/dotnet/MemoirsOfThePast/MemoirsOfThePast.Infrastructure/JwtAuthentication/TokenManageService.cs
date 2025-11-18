@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using MemoirsOfThePast.Infrastructure.Const;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -65,7 +66,7 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
 
             var claims = GetClaims(context);
 
-            var userId = string.Empty;
+            var userId = claims.FirstOrDefault(p=>p.Type == JwtConst.UserId)?.Value;
 
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(userId))
             {
@@ -94,7 +95,7 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
                 return result;
             }
 
-            var cacheTokenStr = await distributedCache.GetStringAsync(string.Format("",userId));
+            var cacheTokenStr = await distributedCache.GetStringAsync(string.Format(CacheKeyConst.TokenCacheKey,userId));
 
             if (string.IsNullOrEmpty(cacheTokenStr))
             {

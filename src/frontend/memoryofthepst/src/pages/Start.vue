@@ -69,17 +69,23 @@ import { RouterLink } from 'vue-router'
 }
 
 .start-page {
+  width: 100%;
+  min-height: 100%;
   display: grid;
   gap: clamp(16px, 4vw, 24px);
+  grid-template-rows: auto auto 1fr; /* 英雄区 / 操作 / 特性栅格 */
+  align-content: start;
 }
 
 .hero {
   display: grid;
-  gap: 12px;
-  padding: clamp(16px, 4vw, 24px);
-  background: var(--card);
+  gap: 14px;
+  padding: clamp(18px, 4.2vw, 28px);
+  background: linear-gradient(180deg, var(--card), color-mix(in oklab, var(--card), #000 4%));
   border: 1px solid var(--line);
   border-radius: var(--radius);
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+  min-height: clamp(220px, 36vh, 480px);
 }
 .brand {
   display: flex;
@@ -94,18 +100,20 @@ import { RouterLink } from 'vue-router'
   border-radius: 12px;
   background: var(--brand-weak);
   color: var(--brand);
+  box-shadow: 0 0 0 8px var(--brand-weak) inset, 0 6px 18px rgba(0,0,0,.06);
 }
 .title {
-  font-size: clamp(18px, 3vw, 24px);
+  font-size: clamp(20px, 3.4vw, 28px);
   font-weight: 800;
-  letter-spacing: .2px;
+  letter-spacing: .3px;
   color: var(--text);
   margin: 0;
 }
 .subtitle {
   color: var(--text-weak);
-  font-size: clamp(13px, 2.2vw, 14px);
+  font-size: clamp(14px, 2.3vw, 16px);
   margin: 0;
+  max-width: 72ch; /* 控制行宽提升可读性 */
 }
 
 .actions {
@@ -118,50 +126,100 @@ import { RouterLink } from 'vue-router'
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 10px;
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 12px;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--card);
   color: var(--text);
   text-decoration: none;
   cursor: pointer;
-  transition: background .2s ease, border-color .2s ease, color .2s ease;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,.04);
 }
 .btn:hover {
   background: var(--brand-weak);
   border-color: #cfe8dc;
   color: var(--brand);
+  transform: translateY(-1px);
+}
+.btn:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 .btn.primary {
   background: var(--brand);
   color: #fff;
-  border-color: transparent;
+  border-color: #34c48a;
 }
 .btn.primary:hover {
-  background: #38aa74;
+  background: #34c48a;
+  color: #fff;
 }
 
 .feature-grid {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(10px, 3vw, 16px);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-auto-rows: 1fr; /* 让卡片在同一行等高 */
+  gap: clamp(14px, 3vw, 20px);
+  align-items: stretch;
 }
 .card {
+  position: relative;
+  display: grid;
+  gap: 8px;
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: clamp(12px, 2.6vw, 16px);
+  padding: clamp(14px, 2.8vw, 18px);
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+  transition: box-shadow .18s ease, border-color .18s ease, background .18s ease, transform .18s ease;
+  min-height: clamp(120px, 28vh, 220px);
+}
+/* 顶部渐变强调条，提升辨识度与层次 */
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--brand), color-mix(in oklab, var(--brand), #000 20%));
+  border-top-left-radius: var(--radius);
+  border-top-right-radius: var(--radius);
+  opacity: .16;
+  pointer-events: none;
+}
+.card:hover {
+  transform: translateY(-1px);
+  border-color: #cfe8dc;
+  background: color-mix(in oklab, var(--card), #000 2%);
+  box-shadow: 0 10px 28px rgba(0,0,0,.08);
+}
+.card:focus-within {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
 }
 .card h3 {
   margin: 0 0 6px;
-  font-size: 16px;
+  font-size: clamp(16px, 2vw, 18px);
   color: var(--text);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+/* 标题前置小圆点增强视觉层次 */
+.card h3::before {
+  content: '';
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--brand);
+  box-shadow: 0 0 0 6px var(--brand-weak);
 }
 .card p {
   margin: 0;
   color: var(--text-weak);
   font-size: 13px;
+  line-height: 1.6;
 }
 
 @media (max-width: 900px) {

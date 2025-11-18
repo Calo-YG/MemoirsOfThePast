@@ -6,6 +6,21 @@ namespace MemoirsOfThePast.Infrastructure.EntityFrameworkCore
 {
     public class AppDbContext: DbContext, IDbContext
     {
+        /// <summary>
+        /// 用户
+        /// </summary>
+        public DbSet<UserEntity> Users { get; set; }
+
+        /// <summary>
+        /// 回忆
+        /// </summary>
+        public DbSet<MemoryEntity> Memories { get; set; }
+
+        /// <summary>
+        /// 碎片
+        /// </summary>
+        public DbSet<FragmentEntity> Fragments { get; set; }
+
         private readonly IUserContext userContext;
         /// <summary>
         /// 构造函数

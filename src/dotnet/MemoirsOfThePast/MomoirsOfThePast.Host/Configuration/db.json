@@ -1,0 +1,5 @@
+{
+  "ConnectionString": {
+    "DefaultConnection": "User ID=postgres;Password=wyg154511;Host=117.72.66.170;Port=5432;Database=memoryofthepast;Pooling=true;"
+  }
+}

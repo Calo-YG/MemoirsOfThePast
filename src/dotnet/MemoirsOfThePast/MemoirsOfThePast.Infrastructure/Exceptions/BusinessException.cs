@@ -1,6 +1,6 @@
 ﻿namespace MemoirsOfThePast.Infrastructure.Exceptions
 {
-    internal class BusinessException:Exception
+    public class BusinessException:Exception
     {
         public int Cod { get;private set; }
 

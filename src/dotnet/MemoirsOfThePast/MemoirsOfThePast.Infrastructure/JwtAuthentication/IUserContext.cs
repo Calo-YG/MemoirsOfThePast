@@ -2,5 +2,8 @@
 {
     public interface IUserContext
     {
+        public string UserName { get;}
+
+        public string UserId { get;}
     }
 }

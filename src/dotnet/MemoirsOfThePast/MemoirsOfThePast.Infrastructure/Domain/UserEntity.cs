@@ -31,8 +31,18 @@
         public string Password { get; set; }
 
         /// <summary>
+        /// 加密key
+        /// </summary>
+        public string Solt { get; set; }
+
+        /// <summary>
         /// 创建时间
         /// </summary>
         public DateTime CreateDate { get; set; }
+
+        public void SetPassword(string password)
+        {
+            Password = password;
+        }
     }
 }

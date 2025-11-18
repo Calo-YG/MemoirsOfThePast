@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRoute, RouterLink, RouterView } from 'vue-router'
+import { isDark, themeMode, resolvedTheme, setTheme } from '../services/theme'
 
 type NavItem = { name: string; path: string; icon: 'home' | 'info' }
 
 const route = useRoute()
 const mobileMenuOpen = ref(false)
+const showThemePanel = ref(false)
 
 const navItems: NavItem[] = [
   { name: '开始', path: '/', icon: 'home' },
   { name: '首页', path: '/home', icon: 'home' },
-  { name: 'AI 聊天', path: '/chat', icon: 'info' },
+  { name: '往事回忆', path: '/memories', icon: 'info' },
+  { name: '往事回首', path: '/chat', icon: 'info' },
   { name: '关于', path: '/about', icon: 'info' }
 ]
 
@@ -19,6 +22,11 @@ function toggleMobileMenu() {
 }
 function closeMobileMenu() {
   mobileMenuOpen.value = false
+}
+
+function pickTheme(m: 'light' | 'dark' | 'system') {
+  setTheme(m)
+  showThemePanel.value = false
 }
 </script>
 
@@ -68,11 +76,39 @@ function closeMobileMenu() {
             <input class="search-input" placeholder="搜索…" />
           </div>
 
-          <button class="ghost-btn" title="切换主题（示例）">
-            <svg viewBox="0 0 24 24" width="18" height="18">
-              <path fill="currentColor" d="M9.37 5.51A7 7 0 0012 19a7 7 0 006.49-9.63A9 9 0 119.37 5.51z"/>
-            </svg>
-          </button>
+          <div class="theme">
+            <button
+              class="ghost-btn theme-toggle"
+              @click="showThemePanel = !showThemePanel"
+              :title="`主题：${themeMode}`"
+            >
+              <!-- 动态图标：暗色显示月亮，亮色显示太阳 -->
+              <svg v-if="isDark" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path fill="currentColor" d="M9.37 5.51A7 7 0 0012 19a7 7 0 006.49-9.63A9 9 0 119.37 5.51z"/>
+              </svg>
+              <svg v-else viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                <path fill="currentColor" d="M6.76 4.84l-1.8-1.79-1.41 1.41 1.79 1.8 1.42-1.42zM1 13h3v-2H1v2zm10 10h2v-3h-2v3zM20 13h3v-2h-3v2zM17.66 4.46l1.79-1.8-1.41-1.41-1.8 1.79 1.42 1.42zM12 6a6 6 0 100 12 6 6 0 000-12zm7.24 12.76l1.8 1.79 1.41-1.41-1.79-1.8-1.42 1.42zM4.46 17.66l-1.79 1.8 1.41 1.41 1.8-1.79-1.42-1.42z"/>
+              </svg>
+            </button>
+            <transition name="fade-pop">
+              <div
+                v-show="showThemePanel"
+                class="theme-pop"
+                role="menu"
+                aria-label="主题选择"
+              >
+                <button class="ghost-btn theme-option" @click="pickTheme('light')">
+                  亮色 <span class="current-badge" v-if="resolvedTheme==='light' && themeMode!=='system'">当前</span>
+                </button>
+                <button class="ghost-btn theme-option" @click="pickTheme('dark')">
+                  暗色 <span class="current-badge" v-if="resolvedTheme==='dark' && themeMode!=='system'">当前</span>
+                </button>
+                <button class="ghost-btn theme-option" @click="pickTheme('system')">
+                  跟随系统 <span class="current-badge" v-if="themeMode==='system'">当前</span>
+                </button>
+              </div>
+            </transition>
+          </div>
 
           <div class="avatar" title="用户">
             <span>MO</span>
@@ -214,7 +250,7 @@ function closeMobileMenu() {
   height: 36px;
   border: 1px solid var(--line);
   border-radius: 10px;
-  background: #fff;
+  background: var(--card);
 }
 .search-input {
   border: none;
@@ -234,7 +270,7 @@ function closeMobileMenu() {
   height: 36px;
   border-radius: 10px;
   border: 1px solid var(--line);
-  background: #fff;
+  background: var(--card);
   color: var(--text-weak);
   display: grid;
   place-items: center;
@@ -573,5 +609,181 @@ function closeMobileMenu() {
 /* 超宽屏提升容器最大宽度 */
 @media (min-width: 1440px) {
   :root { --container-max: 1440px; }
+}
+
+/* 主题面板样式优化 */
+.theme { position: relative; }
+.theme-toggle { /* 继承 ghost-btn 尺寸 */ }
+.theme-pop {
+  position: absolute;
+  right: 0;
+  top: 44px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.06);
+  display: grid;
+  gap: 6px;
+  z-index: 50;
+  min-width: 160px;
+  backdrop-filter: saturate(1.06) blur(6px);
+}
+.theme-pop::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  right: 14px;
+  width: 10px;
+  height: 10px;
+  background: var(--card);
+  border-left: 1px solid var(--line);
+  border-top: 1px solid var(--line);
+  transform: rotate(45deg);
+}
+
+/* 下拉选项覆盖 ghost-btn，使其更贴近列表样式 */
+.theme-option {
+  width: 100%;
+  justify-content: flex-start;
+  background: transparent;
+  border-color: transparent;
+  color: var(--text);
+  padding: 8px 10px;
+}
+.theme-option:hover {
+  background: var(--brand-weak);
+  color: var(--brand);
+  border-color: #d6efe4;
+}
+.current-badge {
+  margin-left: auto;
+  color: var(--text-weak);
+  font-size: 12px;
+}
+
+/* 下拉出现过渡动画 */
+.fade-pop-enter-active,
+.fade-pop-leave-active {
+  transition: opacity .16s ease, transform .18s ease;
+}
+.fade-pop-enter-from,
+.fade-pop-leave-to {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.98);
+}
+@media (prefers-reduced-motion: reduce) {
+  .fade-pop-enter-active,
+  .fade-pop-leave-active {
+    transition: none;
+  }
+}
+
+/* 无障碍可见焦点 */
+.theme-option:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 2px;
+}
+</style>
+<style scoped>
+/* 面包屑（breadcrumbs）视觉优化：胶囊背景、分隔符、溢出省略、暗色适配 */
+.page-meta {
+  margin: 12px auto 0;
+}
+.breadcrumbs {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--card);
+  color: var(--text-weak);
+  font-size: 12px;
+  line-height: 1;
+  box-shadow: 0 6px 20px rgba(0,0,0,.05);
+  backdrop-filter: saturate(1.06) blur(4px);
+}
+/* “当前位置：”提示弱化 */
+.breadcrumbs .crumb:first-child {
+  color: var(--text-weak);
+}
+/* 动态标题溢出省略，避免长标题撑破布局 */
+.breadcrumbs .crumb {
+  display: inline-flex;
+  align-items: center;
+  max-width: 48vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* 激活态加粗与主文本色 */
+.breadcrumbs .crumb.active {
+  color: var(--text);
+  font-weight: 600;
+  max-width: 56vw;
+}
+/* 分隔符：为后续项添加 › 符号（不影响首项“当前位置：”） */
+.breadcrumbs .crumb + .crumb::before {
+  content: "›";
+  margin: 0 6px;
+  color: #cbd5e1;
+}
+
+/* 悬停轻微强化（非移动端） */
+@media (hover: hover) and (pointer: fine) {
+  .breadcrumbs:hover {
+    box-shadow: 0 10px 28px rgba(0,0,0,.06);
+    border-color: color-mix(in oklab, var(--line), var(--brand) 10%);
+  }
+}
+
+/* 小屏收敛边距与半径 */
+@media (max-width: 768px) {
+  .breadcrumbs {
+    padding: 6px 10px;
+    border-radius: 12px;
+  }
+  .breadcrumbs .crumb { max-width: 66vw; }
+  .breadcrumbs .crumb.active { max-width: 74vw; }
+}
+</style>
+<style scoped>
+/* 屏幕自适配增强：让主内容区域随视口高度与宽度自适应（统一对所有页面生效） */
+:root { --footer-h: 56px; }
+
+/* 主内容容器：填满可用宽度，高度基于视口与头/脚高度计算 */
+.main {
+  width: 100%;
+  max-width: var(--container-max);
+  display: grid;
+  grid-auto-rows: minmax(0, auto);
+  min-height: calc(100vh - var(--header-h) - var(--footer-h) - 160px);
+  /* 说明：
+   * 160px 为页面 meta 与上下内边距的预留空间，避免在极端小屏下高度被撑破。
+   * 若后续页面顶部 meta 调整，可按需收敛该值。
+   */
+}
+
+/* 现代视口单位：优先使用 100dvh/100svh，避免移动端地址栏高度跳变 */
+@supports (height: 100dvh) {
+  .main { min-height: calc(100dvh - var(--header-h) - var(--footer-h) - 160px); }
+}
+@supports (height: 100svh) {
+  .main { min-height: calc(100svh - var(--header-h) - var(--footer-h) - 160px); }
+}
+
+/* 主内容内的页面根节点（section 等）默认拉伸填充 */
+.main > * {
+  width: 100%;
+  min-width: 0;
+}
+
+/* 小屏收敛高度预留值：减少顶部/底部占位带来的拥挤感 */
+@media (max-width: 768px) {
+  .main {
+    min-height: calc(100dvh - var(--header-h) - var(--footer-h) - 120px);
+  }
 }
 </style>

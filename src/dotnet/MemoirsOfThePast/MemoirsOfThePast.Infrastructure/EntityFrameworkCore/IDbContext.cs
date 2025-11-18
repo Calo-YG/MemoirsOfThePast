@@ -1,9 +1,25 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using MemoirsOfThePast.Infrastructure.Domain;
+using Microsoft.EntityFrameworkCore;
 
 namespace MemoirsOfThePast.Infrastructure.EntityFrameworkCore;
 
 public interface IDbContext
 {
+    /// <summary>
+    /// 用户
+    /// </summary>
+    public DbSet<UserEntity> Users { get; set; }
+
+    /// <summary>
+    /// 回忆
+    /// </summary>
+    public DbSet<MemoryEntity> Memories { get; set; }
+
+    /// <summary>
+    /// 碎片
+    /// </summary>
+    public DbSet<FragmentEntity> Fragments { get; set; }
+
     /// <summary>
     /// 迁移
     /// </summary>

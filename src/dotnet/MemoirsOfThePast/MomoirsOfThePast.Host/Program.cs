@@ -1,14 +1,20 @@
+using MemoirsOfThePast.HoST.Service.Auth;
+using MemoirsOfThePast.HoST.Service.User;
 using MemoirsOfThePast.Infrastructure.Core;
+using MemoirsOfThePast.Infrastructure.EntityFrameworkCore;
+using MemoirsOfThePast.Infrastructure.JwtAuthentication;
 using MemoirsOfThePast.Infrastructure.Options;
 using MemoirsOfThePast.Infrastructure.SqlBot;
 using MemoirsOfThePast.Infrastructure.SqlBot.SqlBotEvent;
 using Microsoft.Agents.AI.Hosting;
 using Microsoft.Agents.AI.Workflows;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Options;
 using OpenAI;
 using Scalar.AspNetCore;
 using System.ClientModel;
+using System.Text.Json;
 using static MemoirsOfThePast.Infrastructure.AgentFrameworkSample.AgentExecutor;
 using DateTimeConverter = MemoirsOfThePast.Infrastructure.Core.DateTimeConverter;
 
@@ -18,27 +24,52 @@ var configuration = builder.Configuration;
 
 var cors = "MemoirsOfThePast";
 
+builder.Services.Configure<LLMOptions>(builder.Configuration.GetSection(nameof(LLMOptions)));
+builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddAuthentication();
+builder.Services.AddAuthentication(defaultScheme:JwtBearerConst.Scheme).AddJwtBearer(builder.Configuration);
 builder.Services.AddAuthorization();
-builder.Services.Configure<LLMOptions>(builder.Configuration.GetSection(nameof(LLMOptions)));
-#region 注册ef core
-//// 设置AppContext开关，以启用Npgsql的遗留时间戳行为
-//AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-//// 设置AppContext开关，以禁用DateTime的无穷大转换
-//AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 
-//// 添加DbContext到服务集合中，指定为Scoped生命周期
-//builder.Services.AddDbContext<IDbContext, AppDbContext>((builder) =>
-//{
-//    // 使用Npgsql作为数据库提供程序，并从配置中获取连接字符串
-//    builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), options =>
-//    {
-//        // 此处可根据需要配置Npgsql选项
-//    });
-//}, contextLifetime: ServiceLifetime.Scoped, optionsLifetime: ServiceLifetime.Scoped);
+
+#region 最小api 模型验证
+builder.Services.AddValidation();
+builder.Services.AddProblemDetails(ctx =>
+{
+    ctx.CustomizeProblemDetails = context =>
+    {
+        if (context.ProblemDetails.Status == 400)
+        {
+            context.ProblemDetails.Title = "Validation error occurred";
+            context.ProblemDetails.Extensions["support"] = "Contact support@example.com";
+            context.ProblemDetails.Extensions["traceId"] = Guid.NewGuid().ToString();
+
+            var details = context.ProblemDetails.Detail;
+
+            var result = ApiResult.Fail(details,400);
+
+            context.HttpContext.Response.WriteAsync(JsonSerializer.Serialize(result));
+        }
+    };
+});
+#endregion 
+
+#region 注册ef core
+// 设置AppContext开关，以启用Npgsql的遗留时间戳行为
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+// 设置AppContext开关，以禁用DateTime的无穷大转换
+AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+
+// 添加DbContext到服务集合中，指定为Scoped生命周期
+builder.Services.AddDbContext<IDbContext, AppDbContext>((builder) =>
+{
+    // 使用Npgsql作为数据库提供程序，并从配置中获取连接字符串
+    builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), options =>
+    {
+        // 此处可根据需要配置Npgsql选项
+    });
+}, contextLifetime: ServiceLifetime.Scoped, optionsLifetime: ServiceLifetime.Scoped);
 #endregion
 
 #region json 序列化配置
@@ -52,11 +83,11 @@ builder.Services.ConfigureHttpJsonOptions(op =>
 #endregion
 
 #region 添加分布式缓存
-//builder.Services.AddStackExchangeRedisCache(options =>
-//{
-//    options.Configuration = builder.Configuration.GetConnectionString("RedisConn");
-//    options.InstanceName = "SpeakEase";
-//});
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration = builder.Configuration.GetSection("Redisconn").Get<string>();
+    options.InstanceName = "SpeakEase";
+});
 #endregion
 
 #region 跨域配置
@@ -94,7 +125,6 @@ builder.Services.AddSingleton<IChatClient>(sp =>
 #region 配置agent
 
 builder.Services.AddTransient<ISqlAgent, SqlAgent>();
-//ilder.AddAIAgent("DefaultChatAgent",);
 builder.Services.AddAIAgent(SqlMessageAnalyzeExecutor.AgentName, (sp, s) =>
 {
     var chatClient = sp.GetRequiredService<IChatClient>();
@@ -267,4 +297,8 @@ FROM
         }
     }
 });
+
+app.MapUser();
+app.MapAuth();
+
 await app.RunAsync();
