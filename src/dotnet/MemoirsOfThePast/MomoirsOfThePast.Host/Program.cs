@@ -1,4 +1,6 @@
 using MemoirsOfThePast.HoST.Service.Auth;
+using MemoirsOfThePast.HoST.Service.Fragment;
+using MemoirsOfThePast.HoST.Service.Memory;
 using MemoirsOfThePast.HoST.Service.User;
 using MemoirsOfThePast.Infrastructure.Core;
 using MemoirsOfThePast.Infrastructure.EntityFrameworkCore;
@@ -122,6 +124,12 @@ builder.Services.AddSingleton<IChatClient>(sp =>
 //builder.AddAIAgent("Marry",in)
 #endregion
 
+#region ×¢²á·þÎñ
+builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IMemoryService, MemoryService>();
+builder.Services.AddTransient<IFragmentService, FragmentService>();
+#endregion 
 #region ÅäÖÃagent
 
 builder.Services.AddTransient<ISqlAgent, SqlAgent>();
@@ -300,5 +308,6 @@ FROM
 
 app.MapUser();
 app.MapAuth();
+app.MapFragment();
 
 await app.RunAsync();
