@@ -17,7 +17,6 @@ using Microsoft.Extensions.Options;
 using OpenAI;
 using Scalar.AspNetCore;
 using System.ClientModel;
-using System.Text.Json;
 using static MemoirsOfThePast.Infrastructure.AgentFrameworkSample.AgentExecutor;
 using DateTimeConverter = MemoirsOfThePast.Infrastructure.Core.DateTimeConverter;
 
@@ -27,36 +26,17 @@ var configuration = builder.Configuration;
 
 var cors = "MemoirsOfThePast";
 
+builder.Services.AddScoped<ExceptionMiddleware>();
 builder.Services.Configure<LLMOptions>(builder.Configuration.GetSection(nameof(LLMOptions)));
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(defaultScheme:JwtBearerConst.Scheme).AddJwtBearer(builder.Configuration);
 builder.Services.AddAuthorization();
-//builder.Services.AddScoped<ExceptionMiddleware>();
 
 #region 最小api 模型验证
 //builder.Services.AddValidation();
 //全局错误处理
-builder.Services.AddProblemDetails(ctx =>
-{
-    ctx.CustomizeProblemDetails = context =>
-    {
-        if (context.ProblemDetails.Status == 500)
-        {
-            context.ProblemDetails.Title = "Validation error occurred";
-            context.ProblemDetails.Extensions["support"] = "Contact support@example.com";
-            context.ProblemDetails.Extensions["traceId"] = Guid.NewGuid().ToString();
-
-            var details = context.ProblemDetails.Detail;
-
-            var result = ApiResult.Fail(details,400);
-            context.HttpContext.Response.StatusCode = 200;
-            context.HttpContext.Response.ContentType = "application/json";
-            context.HttpContext.Response.WriteAsync(JsonSerializer.Serialize(result));
-        }
-    };
-});
 #endregion 
 
 #region 注册ef core
@@ -170,11 +150,11 @@ builder.Services.AddAIAgent(SqlGenerateExecutor.AgentName, (sp, s) =>
 #endregion
 var app = builder.Build();
 
-app.MapDefaultEndpoints();
-
 app.UseCors(cors);
 
-//app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<ExceptionMiddleware>();
+
+app.MapDefaultEndpoints();
 
 if (app.Environment.IsDevelopment())
 {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,8 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
             var options = configuration.GetSection(nameof(JwtOptions)).Get<JwtOptions>();
 
             builder.Services.AddScoped<ITokenManageService, TokenManageService>();
+
+            builder.Services.AddSingleton<IAuthorizationMiddlewareResultHandler, AuthorizeResultHandle>();
 
             return builder.AddScheme<JwtOptions, JwtAuthenticationHandler>(authenticationScheme, authenticationScheme, p =>
             {

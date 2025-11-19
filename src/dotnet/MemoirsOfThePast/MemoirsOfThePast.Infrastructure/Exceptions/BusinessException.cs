@@ -2,7 +2,7 @@
 {
     public class BusinessException:Exception
     {
-        public int Cod { get;private set; }
+        public int Code { get;private set; }
 
         public BusinessException()
         {
@@ -14,6 +14,7 @@
 
         public BusinessException(int code,string message) : base(message)
         {
+            this.Code = code;
         }
     }
 }

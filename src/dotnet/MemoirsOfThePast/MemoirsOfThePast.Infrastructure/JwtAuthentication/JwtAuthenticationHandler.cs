@@ -30,7 +30,7 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
 
             if (!result.IsAuthenticated)
             {
-                throw new BusinessException(result.Code,result.Message);
+                return AuthenticateResult.Fail(new BusinessException(result.Code, result.Message));
             }
 
             var claims = tokenManageService.GetClaims(Context);
