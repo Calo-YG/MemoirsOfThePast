@@ -1,6 +1,9 @@
 /* Axios 基础封装：src/services/http.ts */
 import axios, { type AxiosError, type AxiosInstance, type AxiosRequestConfig, type AxiosResponse } from 'axios';
 
+let isRefreshing = false;
+let requestQueue = [];
+
 /**
  * 通用接口返回包裹类型（兼容多数后端约定式返回）
  * - 支持 { code, message, data } 形式

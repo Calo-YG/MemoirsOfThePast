@@ -11,7 +11,7 @@ import Memories from '../pages/Memories.vue';
 const routes: RouteRecordRaw[] = [
   { path: '/', name: 'Start', component: Start, meta: { title: '开始' } },
   {
-    path: '/app',
+    path: '/',
     component: DefaultLayout,
     children: [
       { path: 'home', name: 'Home', component: Home, meta: { title: '首页' } },

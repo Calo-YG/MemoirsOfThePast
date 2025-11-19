@@ -33,15 +33,16 @@ builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(defaultScheme:JwtBearerConst.Scheme).AddJwtBearer(builder.Configuration);
 builder.Services.AddAuthorization();
-builder.Services.AddTransient<ExceptionMiddleware>();
+//builder.Services.AddScoped<ExceptionMiddleware>();
 
 #region 最小api 模型验证
 //builder.Services.AddValidation();
+//全局错误处理
 builder.Services.AddProblemDetails(ctx =>
 {
     ctx.CustomizeProblemDetails = context =>
     {
-        if (context.ProblemDetails.Status == 400)
+        if (context.ProblemDetails.Status == 500)
         {
             context.ProblemDetails.Title = "Validation error occurred";
             context.ProblemDetails.Extensions["support"] = "Contact support@example.com";
@@ -50,7 +51,8 @@ builder.Services.AddProblemDetails(ctx =>
             var details = context.ProblemDetails.Detail;
 
             var result = ApiResult.Fail(details,400);
-
+            context.HttpContext.Response.StatusCode = 200;
+            context.HttpContext.Response.ContentType = "application/json";
             context.HttpContext.Response.WriteAsync(JsonSerializer.Serialize(result));
         }
     };
@@ -99,7 +101,7 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 builder.Services.AddCors(opt => opt.AddPolicy(cors, policy =>
     policy
-        .WithOrigins("http://localhost:8080", "https://app.apifox.com") // 允许所有来源
+        .WithOrigins("http://localhost:5173") // 允许所有来源
         .AllowAnyHeader()
         .AllowAnyMethod()
         .AllowCredentials())
@@ -172,7 +174,7 @@ app.MapDefaultEndpoints();
 
 app.UseCors(cors);
 
-app.UseMiddleware<ExceptionMiddleware>();
+//app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

@@ -27,16 +27,16 @@ async function onSubmit() {
   }
   loading.value = true
   try {
-    const resp = await post<{ token?: string; message?: string }, { email: string; password: string }>(
+    const resp = await post<{ token?: string; message?: string }, { account: string; password: string }>(
       '/auth/login',
-      { email: email.value.trim(), password: password.value }
+      { account: email.value.trim(), password: password.value }
     )
     const token = (resp as any)?.token
     if (token) {
       localStorage.setItem('ACCESS_TOKEN', token)
     }
     // 登录成功后跳转开始页或首页
-    router.push('/start')
+    router.push('/app/home')
   } catch (e) {
     error.value = (e as any)?.message ?? '登录失败，请稍后重试'
   } finally {
@@ -107,162 +107,5 @@ function onKeydown(e: KeyboardEvent) {
   </section>
 </template>
 
-<style scoped>
-:root {
-  --radius: 16px;
-  --card: rgba(255 255 255 / 0.9);
-  --line: #d0e6d9;
-  --text: #1f2937;
-  --text-weak: #6b7280;
-  --brand: #42b883;
-  --brand-weak: rgba(66, 184, 131, 0.12);
-}
-
-.auth-page {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 95vh;
-  padding: 40px 20px;
-  /* 添加渐变背景色 */
-  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
-}
-
-.card {
-  width: 100%;
-  max-width: 420px;
-  background: var(--card);
-  border-radius: var(--radius);
-  padding: 36px 28px;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.15);
-  border: 1px solid var(--line);
-  backdrop-filter: saturate(180%) blur(8px);
-}
-
-.title {
-  font-size: 26px;
-  color: #fff;
-  margin-bottom: 12px;
-  text-shadow: 0 1px 6px rgba(0,0,0,0.25);
-  font-weight: 900;
-}
-
-.desc {
-  font-size: 15px;
-  color: #e0ecef;
-  margin-bottom: 14px;
-  font-weight: 500;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.1);
-}
-
-.extra-desc {
-  display: grid;
-  grid-template-columns: 130px 1fr;
-  gap: 16px 28px;
-  margin-bottom: 32px;
-  align-items: start;
-}
-
-.desc-labels {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  font-weight: 700;
-  font-size: 18px;
-  color: #057a55;
-}
-
-.desc-texts {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  font-size: 15px;
-  color: #1c3d2e;
-}
-
-.desc-item {
-  margin: 0;
-}
-
-.form {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-}
-.form-item {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-}
-.label {
-  font-weight: 700;
-  font-size: 17px;
-  color: #2e5831;
-}
-.input {
-  height: 52px;
-  padding: 0 20px;
-  border-radius: 14px;
-  border: 1px solid #a3c4a5;
-  font-size: 18px;
-  color: #254021;
-  background: #e9f1e7;
-  transition: border-color 0.3s ease;
-}
-.input::placeholder {
-  color: #97b49f;
-}
-.input:focus {
-  border-color: #47b37b;
-  outline: none;
-  box-shadow: 0 0 8px 4px rgba(71, 179, 123, 0.45);
-}
-.error {
-  color: #bb2a2a;
-  font-size: 16px;
-  margin-top: -10px;
-  margin-bottom: 14px;
-  font-weight: 700;
-}
-.actions {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-top: 24px;
-}
-.btn {
-  height: 52px;
-  border-radius: 14px;
-  font-weight: 700;
-  font-size: 18px;
-  cursor: pointer;
-  border: none;
-  transition: background-color 0.3s ease, transform 0.15s ease;
-}
-.btn.primary {
-  background-color: #2e8a57;
-  color: white;
-}
-.btn.primary:hover:not([disabled]) {
-  background-color: #1c5f34;
-  transform: translateY(-2px);
-}
-.btn.primary:disabled {
-  background-color: #b1cfbc;
-  cursor: not-allowed;
-}
-.link {
-  text-align: center;
-  color: #4a6e54;
-  font-size: 16px;
-  text-decoration: underline;
-  cursor: pointer;
-  line-height: 1.6;
-  user-select: none;
-}
-.link:hover {
-  color: #2e8a57;
-}
+<style src="./styles/login.css" scoped>
 </style>

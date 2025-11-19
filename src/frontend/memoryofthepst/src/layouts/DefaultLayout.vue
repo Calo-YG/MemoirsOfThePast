@@ -11,10 +11,10 @@ const showThemePanel = ref(false)
 
 const navItems: NavItem[] = [
   { name: '开始', path: '/', icon: 'home' },
-  { name: '首页', path: '/home', icon: 'home' },
-  { name: '往事回忆', path: '/memories', icon: 'info' },
-  { name: '往事回首', path: '/chat', icon: 'info' },
-  { name: '关于', path: '/about', icon: 'info' }
+  { name: '首页', path: 'app/home', icon: 'home' },
+  { name: '往事回忆', path: 'memories', icon: 'info' },
+  { name: '往事回首', path: 'chat', icon: 'info' },
+  { name: '关于', path: 'about', icon: 'info' }
 ]
 
 function toggleMobileMenu() {
