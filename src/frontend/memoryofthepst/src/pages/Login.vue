@@ -57,6 +57,18 @@ function onKeydown(e: KeyboardEvent) {
     <div class="card">
       <h2 class="title">登录</h2>
       <p class="desc">输入你的账号信息以登录系统。</p>
+      <div class="extra-desc grid-layout">
+        <div class="desc-labels">
+          <div class="desc-item">高效管理</div>
+          <div class="desc-item">智能辅助</div>
+          <div class="desc-item">简洁界面</div>
+        </div>
+        <div class="desc-texts">
+          <div class="desc-item">快速记录灵感与回忆，保持知识持续进化。</div>
+          <div class="desc-item">借助 AI 助手理解、总结与联想，提升信息价值。</div>
+          <div class="desc-item">响应式设计，专注内容表达，提升使用体验。</div>
+        </div>
+      </div>
 
       <form class="form" @submit.prevent="onSubmit">
         <div class="form-item">
@@ -97,9 +109,9 @@ function onKeydown(e: KeyboardEvent) {
 
 <style scoped>
 :root {
-  --radius: 12px;
-  --card: #ffffff;
-  --line: #e9edf2;
+  --radius: 16px;
+  --card: rgba(255 255 255 / 0.9);
+  --line: #d0e6d9;
   --text: #1f2937;
   --text-weak: #6b7280;
   --brand: #42b883;
@@ -108,95 +120,149 @@ function onKeydown(e: KeyboardEvent) {
 
 .auth-page {
   width: 100%;
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 95vh;
+  padding: 40px 20px;
+  /* 添加渐变背景色 */
+  background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
 }
 
 .card {
   width: 100%;
-  max-width: 520px;
+  max-width: 420px;
   background: var(--card);
-  border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: clamp(16px, 4vw, 24px);
-  box-shadow: 0 4px 18px rgba(0,0,0,.04);
+  padding: 36px 28px;
+  box-shadow: 0 12px 36px rgba(0,0,0,0.15);
+  border: 1px solid var(--line);
+  backdrop-filter: saturate(180%) blur(8px);
 }
 
 .title {
-  margin: 0;
-  font-weight: 800;
-  font-size: 18px;
-  color: var(--text);
+  font-size: 26px;
+  color: #fff;
+  margin-bottom: 12px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.25);
+  font-weight: 900;
 }
+
 .desc {
-  margin: 6px 0 12px;
-  font-size: 13px;
-  color: var(--text-weak);
+  font-size: 15px;
+  color: #e0ecef;
+  margin-bottom: 14px;
+  font-weight: 500;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.extra-desc {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 16px 28px;
+  margin-bottom: 32px;
+  align-items: start;
+}
+
+.desc-labels {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-weight: 700;
+  font-size: 18px;
+  color: #057a55;
+}
+
+.desc-texts {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 15px;
+  color: #1c3d2e;
+}
+
+.desc-item {
+  margin: 0;
 }
 
 .form {
-  display: grid;
-  gap: 12px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 .form-item {
-  display: grid;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
 }
 .label {
-  font-size: 13px;
-  color: var(--text);
+  font-weight: 700;
+  font-size: 17px;
+  color: #2e5831;
 }
 .input {
-  width: 100%;
-  height: 38px;
-  padding: 0 12px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  font-size: 14px;
-  color: var(--text);
-  background: #fff;
+  height: 52px;
+  padding: 0 20px;
+  border-radius: 14px;
+  border: 1px solid #a3c4a5;
+  font-size: 18px;
+  color: #254021;
+  background: #e9f1e7;
+  transition: border-color 0.3s ease;
 }
-.input::placeholder { color: #98a2ad; }
-
+.input::placeholder {
+  color: #97b49f;
+}
+.input:focus {
+  border-color: #47b37b;
+  outline: none;
+  box-shadow: 0 0 8px 4px rgba(71, 179, 123, 0.45);
+}
 .error {
-  margin: 2px 0 6px;
-  font-size: 12px;
-  color: #d93025;
+  color: #bb2a2a;
+  font-size: 16px;
+  margin-top: -10px;
+  margin-bottom: 14px;
+  font-weight: 700;
 }
-
 .actions {
   display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 6px;
+  flex-direction: column;
+  gap: 20px;
+  margin-top: 24px;
 }
 .btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--text);
+  height: 52px;
+  border-radius: 14px;
+  font-weight: 700;
+  font-size: 18px;
   cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease, transform 0.15s ease;
 }
 .btn.primary {
-  background: var(--brand);
-  color: #fff;
-  border-color: transparent;
+  background-color: #2e8a57;
+  color: white;
 }
-.btn.primary[disabled] {
-  opacity: .7;
+.btn.primary:hover:not([disabled]) {
+  background-color: #1c5f34;
+  transform: translateY(-2px);
+}
+.btn.primary:disabled {
+  background-color: #b1cfbc;
   cursor: not-allowed;
 }
 .link {
-  color: var(--text-weak);
-  text-decoration: none;
-  font-size: 13px;
+  text-align: center;
+  color: #4a6e54;
+  font-size: 16px;
+  text-decoration: underline;
+  cursor: pointer;
+  line-height: 1.6;
+  user-select: none;
 }
 .link:hover {
-  color: var(--brand);
+  color: #2e8a57;
 }
 </style>

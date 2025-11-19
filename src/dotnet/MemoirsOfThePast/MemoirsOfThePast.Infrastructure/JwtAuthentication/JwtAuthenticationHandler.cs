@@ -35,7 +35,7 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
 
             var claims = tokenManageService.GetClaims(Context);
 
-            ClaimsIdentity[] identity = [new ClaimsIdentity(claims)];
+            ClaimsIdentity[] identity = [new ClaimsIdentity(claims,authenticationType:JwtBearerConst.Scheme)];
 
             var principal = new ClaimsPrincipal(identity);
 

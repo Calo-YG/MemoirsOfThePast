@@ -52,9 +52,19 @@ function onKeydown(e: KeyboardEvent) {
 
 <template>
   <section class="auth-page">
-    <div class="card">
-      <h2 class="title">注册</h2>
-      <p class="desc">创建你的账号以开始使用系统。</p>
+    <div class="card layout-horizontal">
+      <div class="extra-desc horizontal-layout">
+        <div class="desc-labels">
+          <div class="desc-item">轻松记录</div>
+          <div class="desc-item">智能助手</div>
+          <div class="desc-item">简洁设计</div>
+        </div>
+        <div class="desc-texts">
+          <div class="desc-item">快速捕捉灵感与回忆，保持知识的持续积累。</div>
+          <div class="desc-item">利用 AI 技术帮助理解、总结和联想，提升信息价值。</div>
+          <div class="desc-item">响应式界面，专注内容表达，提升用户体验。</div>
+        </div>
+      </div>
 
       <form class="form" @submit.prevent="onSubmit">
         <div class="form-item">
@@ -105,114 +115,5 @@ function onKeydown(e: KeyboardEvent) {
   </section>
 </template>
 
-<style scoped>
-:root {
-  --radius: 12px;
-  --card: #ffffff;
-  --line: #e9edf2;
-  --text: #1f2937;
-  --text-weak: #6b7280;
-  --brand: #42b883;
-  --brand-weak: rgba(66, 184, 131, 0.12);
-}
-
-.auth-page {
-  width: 100%;
-  display: grid;
-  place-items: center;
-}
-
-.card {
-  width: 100%;
-  max-width: 520px;
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: clamp(16px, 4vw, 24px);
-  box-shadow: 0 4px 18px rgba(0,0,0,.04);
-}
-
-.title {
-  margin: 0;
-  font-weight: 800;
-  font-size: 18px;
-  color: var(--text);
-}
-.desc {
-  margin: 6px 0 12px;
-  font-size: 13px;
-  color: var(--text-weak);
-}
-
-.form {
-  display: grid;
-  gap: 12px;
-}
-.form-item {
-  display: grid;
-  gap: 6px;
-}
-.label {
-  font-size: 13px;
-  color: var(--text);
-}
-.input {
-  width: 100%;
-  height: 38px;
-  padding: 0 12px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  font-size: 14px;
-  color: var(--text);
-  background: #fff;
-}
-.input::placeholder { color: #98a2ad; }
-
-.hint {
-  margin: 4px 0 0;
-  font-size: 12px;
-  color: var(--text-weak);
-}
-
-.error {
-  margin: 2px 0 6px;
-  font-size: 12px;
-  color: #d93025;
-}
-
-.actions {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 6px;
-}
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 38px;
-  padding: 0 14px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: #fff;
-  color: var(--text);
-  cursor: pointer;
-}
-.btn.primary {
-  background: var(--brand);
-  color: #fff;
-  border-color: transparent;
-}
-.btn.primary[disabled] {
-  opacity: .7;
-  cursor: not-allowed;
-}
-.link {
-  color: var(--text-weak);
-  text-decoration: none;
-  font-size: 13px;
-}
-.link:hover {
-  color: var(--brand);
-}
+<style src="./styles/register.css" scoped>
 </style>

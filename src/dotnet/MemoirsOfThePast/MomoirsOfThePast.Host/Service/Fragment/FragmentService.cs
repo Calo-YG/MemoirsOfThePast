@@ -38,6 +38,7 @@ namespace MemoirsOfThePast.HoST.Service.Fragment
             return dbContext.QueryNoTracking<FragmentEntity>()
                 .Where(p => p.MemoryId == input.MemoryId)
                 .WhereIf(!string.IsNullOrEmpty(input.Name), p => p.Description.Contains(input.Name) || p.Scene.Contains(input.Name))
+                .OrderByDescending(p=>p.OccurDate)
                 .Select(p => new FramentListDto
                 {
                     Description = p.Description,

@@ -13,7 +13,7 @@ namespace MemoirsOfThePast.HoST.Service.Memory
                  .WithTags("memory")
                  .AddEndpointFilter<ResultEndpointFilter>();
 
-            group.Map("addMemroy", (IMemoryService memoryService, CreateMemoryInput input) => memoryService.AddMemoryAsync(input)).WithSummary("创建回忆").RequireAuthorization();
+            group.MapPost("addMemroy", (IMemoryService memoryService, CreateMemoryInput input) => memoryService.AddMemoryAsync(input)).WithSummary("创建回忆").RequireAuthorization();
 
             group.MapGet("getList",(IMemoryService memoryService,string name)=> memoryService.GetListAsync(name)).WithSummary("回忆列表").RequireAuthorization();
         }

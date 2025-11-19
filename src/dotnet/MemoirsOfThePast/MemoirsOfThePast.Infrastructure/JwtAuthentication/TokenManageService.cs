@@ -1,4 +1,5 @@
 ﻿using MemoirsOfThePast.Infrastructure.Const;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Logging;
@@ -62,6 +63,14 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
                 IsAuthenticated = false
             };
 
+            var authorize = context.GetEndpoint()?.Metadata?.Any(p => p is AuthorizeAttribute) ?? false;
+
+            if (!authorize)
+            {
+                result.IsAuthenticated = true;
+                return result;
+            }
+
             token = token.Replace("Bearer ", "");
 
             var claims = GetClaims(context);
@@ -104,9 +113,9 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
                 return result;
             }
 
-            var cacheToken = JsonSerializer.Deserialize<TokenModel>(cacheTokenStr);
+            //var cacheToken = JsonSerializer.Deserialize<str>(cacheTokenStr);
 
-            if (cacheToken.AccessToken != token)
+            if (cacheTokenStr != token)
             {
                 result.Code = 401;
                 result.Message = "设备在别处登录，请重新登录";

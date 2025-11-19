@@ -47,11 +47,14 @@ namespace MemoirsOfThePast.Infrastructure.EntityFrameworkCore
             {
                 op.ToTable("memory");
                 op.HasKey(p=>p.Id).HasName("id");
+                op.Property(p => p.Id).HasColumnName("id");
                 op.Property(p => p.Name).IsRequired().HasColumnName("name");
                 op.Property(p=>p.Description).IsRequired().HasColumnName("description");
                 op.Property(p => p.Background).IsRequired().HasColumnName("background");
                 op.Property(p => p.Prompt).HasColumnName("prompt");
+                op.Property(p => p.Avatar).HasColumnName("avatar");
                 op.Property(p => p.CreateDate).IsRequired().HasColumnName("create_date");
+                op.Property(p => p.UserId).HasColumnName("userid");
             });
             #endregion
             #region fragment
@@ -59,6 +62,7 @@ namespace MemoirsOfThePast.Infrastructure.EntityFrameworkCore
             {
                 op.ToTable("fragment");
                 op.HasKey(p => p.Id).HasName("id");
+                op.Property(p => p.Id).HasColumnName("id");
                 op.Property(p => p.MemoryId).IsRequired().HasColumnName("memory_id");
                 op.Property(p => p.Description).IsRequired().HasColumnName("description");
                 op.Property(op => op.OccurDate).IsRequired().HasColumnName("occur_date");
@@ -71,12 +75,14 @@ namespace MemoirsOfThePast.Infrastructure.EntityFrameworkCore
             modelBuilder.Entity<UserEntity>(op =>
             {
                 op.ToTable("users");
-                op.HasKey(p => p.Id).HasName("id");
+                op.HasKey(p => p.Id);
+                op.Property(p => p.Id).HasColumnName("id");
                 op.Property(p => p.Name).IsRequired().HasColumnName("name");
                 op.Property(p => p.Avatar).IsRequired().HasColumnName("avatar");
                 op.Property(p => p.Account).IsRequired().HasColumnName("account");
                 op.Property(p => p.Password).IsRequired().HasColumnName("password");
                 op.Property(p => p.CreateDate).IsRequired().HasColumnName("create_date");
+                op.Property(p => p.Solt).IsRequired().HasColumnName("solt");
             });
             #endregion
             base.OnModelCreating(modelBuilder);

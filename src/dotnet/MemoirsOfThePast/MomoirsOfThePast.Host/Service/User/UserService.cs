@@ -17,6 +17,11 @@ namespace MemoirsOfThePast.HoST.Service.User
         /// <returns></returns>
         public async Task RegisterAsync(RegisterInput input)
         {
+            if(string.IsNullOrEmpty(input.Account) || string.IsNullOrEmpty(input.Password))
+            {
+                throw new BusinessException("请输入账号密码");
+            }
+
             var any = await dbContext.Users.AsNoTracking().AnyAsync(p=>p.Account == input.Account);
 
             if (any)

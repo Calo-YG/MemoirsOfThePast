@@ -21,21 +21,23 @@ import { RouterLink } from 'vue-router'
         <h1 class="title">Memoirs Of The Past</h1>
       </div>
 
-      <p class="subtitle">记录与探索你的灵感与过往，连接现在与未来。</p>
-
-      <div class="actions">
-        <RouterLink to="/login" class="btn primary">
-          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M10 17l5-5-5-5v10zM4 5h4v14H4V5zm14 0h2v14h-2V5z"/></svg>
-          <span>登录</span>
-        </RouterLink>
-        <RouterLink to="/register" class="btn">
-          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z"/></svg>
-          <span>注册</span>
-        </RouterLink>
-        <RouterLink to="/chat" class="btn">
-          <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M4 4h16v12H5.17L4 17.17V4zm0 14h16v2H4v-2z"/></svg>
-          <span>AI 聊天</span>
-        </RouterLink>
+      <div class="center-content">
+        <p class="subtitle">探索你的灵感宝库，连接过去与未来，激发无限可能。</p>
+ 
+        <div class="actions">
+          <RouterLink to="/login" class="btn primary">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M10 17l5-5-5-5v10zM4 5h4v14H4V5zm14 0h2v14h-2V5z"/></svg>
+            <span>登录</span>
+          </RouterLink>
+          <RouterLink to="/register" class="btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M12 12c2.76 0 5-2.24 5-5S14.76 2 12 2 7 4.24 7 7s2.24 5 5 5zm0 2c-4.42 0-8 1.79-8 4v2h16v-2c0-2.21-3.58-4-8-4z"/></svg>
+            <span>注册</span>
+          </RouterLink>
+          <RouterLink to="/chat" class="btn">
+            <svg viewBox="0 0 24 24" width="18" height="18"><path fill="currentColor" d="M4 4h16v12H5.17L4 17.17V4zm0 14h16v2H4v-2z"/></svg>
+            <span>AI 聊天</span>
+          </RouterLink>
+        </div>
       </div>
     </div>
 
@@ -58,178 +60,215 @@ import { RouterLink } from 'vue-router'
 
 <style scoped>
 :root {
-  --radius: 12px;
-  --bg: #f6f7f9;
+  --radius: 16px;
+  --bg: #e9f3ef;
   --card: #ffffff;
-  --line: #e9edf2;
-  --text: #1f2937;
-  --text-weak: #6b7280;
-  --brand: #42b883;
-  --brand-weak: rgba(66, 184, 131, 0.12);
+  --line: #cfe8dc;
+  --text: #1c3d2e;
+  --text-weak: #4a6f5a;
+  --brand: #2d8c59;
+  --brand-weak: rgba(45, 140, 89, 0.15);
 }
 
 .start-page {
   width: 100%;
-  min-height: 100%;
-  display: grid;
-  gap: clamp(16px, 4vw, 24px);
-  grid-template-rows: auto auto 1fr; /* 英雄区 / 操作 / 特性栅格 */
-  align-content: start;
+  min-height: 100vh;
+  padding: 40px 24px;
+  background: linear-gradient(135deg, #d9efe7 0%, #e4f3f1 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 36px;
+  box-sizing: border-box;
 }
 
 .hero {
-  display: grid;
-  gap: 14px;
-  padding: clamp(18px, 4.2vw, 28px);
-  background: linear-gradient(180deg, var(--card), color-mix(in oklab, var(--card), #000 4%));
-  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 24px 32px;
+  background: var(--card);
   border-radius: var(--radius);
-  box-shadow: 0 6px 24px rgba(0,0,0,.06);
-  min-height: clamp(220px, 36vh, 480px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.15);
+  max-width: 900px;
+  width: 100%;
+  transition: box-shadow 0.3s ease;
 }
+
+.hero:hover {
+  box-shadow: 0 18px 48px rgba(0,0,0,0.25);
+}
+
 .brand {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 22px;
 }
+
 .logo {
-  display: grid;
-  place-items: center;
-  width: 42px;
-  height: 42px;
-  border-radius: 12px;
+  width: 56px;
+  height: 56px;
+  border-radius: 20px;
   background: var(--brand-weak);
   color: var(--brand);
-  box-shadow: 0 0 0 8px var(--brand-weak) inset, 0 6px 18px rgba(0,0,0,.06);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 12px var(--brand-weak) inset, 0 10px 30px rgba(0,0,0,0.12);
+  transition: box-shadow 0.3s ease;
 }
+
+.logo:hover {
+  box-shadow: 0 0 0 12px var(--brand-weak) inset, 0 15px 40px rgba(0,0,0,0.2);
+}
+
 .title {
-  font-size: clamp(20px, 3.4vw, 28px);
-  font-weight: 800;
-  letter-spacing: .3px;
+  font-size: clamp(28px, 5vw, 36px);
+  font-weight: 900;
   color: var(--text);
   margin: 0;
+  text-shadow: 0 0 3px rgba(0,0,0,0.04);
 }
+
+.center-content {
+  flex: 1;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
 .subtitle {
   color: var(--text-weak);
-  font-size: clamp(14px, 2.3vw, 16px);
+  font-size: clamp(16px, 3vw, 20px);
+  line-height: 1.8;
   margin: 0;
-  max-width: 72ch; /* 控制行宽提升可读性 */
+  max-width: 100%;
+  user-select: none;
 }
 
 .actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 6px;
+  gap: 20px;
+  margin-top: 18px;
+  flex-wrap: nowrap;
 }
+
 .btn {
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 12px;
+  gap: 10px;
+  height: 48px;
+  padding: 0 20px;
+  border-radius: 16px;
   border: 1px solid var(--line);
   background: var(--card);
   color: var(--text);
   text-decoration: none;
   cursor: pointer;
-  transition: background .18s ease, border-color .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
-  box-shadow: 0 4px 16px rgba(0,0,0,.04);
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  font-weight: 600;
+  font-size: 16px;
+  user-select: none;
 }
+
 .btn:hover {
   background: var(--brand-weak);
-  border-color: #cfe8dc;
+  border-color: #a7d1b7;
   color: var(--brand);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.10);
 }
-.btn:focus-visible {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
-}
+
 .btn.primary {
   background: var(--brand);
   color: #fff;
   border-color: #34c48a;
+  font-weight: 700;
+  font-size: 18px;
 }
+
 .btn.primary:hover {
   background: #34c48a;
   color: #fff;
+  box-shadow: 0 10px 32px rgba(0,0,0,0.15);
 }
 
 .feature-grid {
-  position: relative;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  grid-auto-rows: 1fr; /* 让卡片在同一行等高 */
-  gap: clamp(14px, 3vw, 20px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(18px, 3vw, 24px);
+  width: 100%;
+  max-width: 960px;
   align-items: stretch;
 }
+
 .card {
-  position: relative;
-  display: grid;
-  gap: 8px;
   background: var(--card);
-  border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: clamp(14px, 2.8vw, 18px);
-  box-shadow: 0 6px 24px rgba(0,0,0,.06);
-  transition: box-shadow .18s ease, border-color .18s ease, background .18s ease, transform .18s ease;
-  min-height: clamp(120px, 28vh, 220px);
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 48px rgba(0,0,0,0.1);
+  padding: clamp(20px, 4vw, 28px);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-height: 200px;
+  transition: box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease;
 }
-/* 顶部渐变强调条，提升辨识度与层次 */
-.card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--brand), color-mix(in oklab, var(--brand), #000 20%));
-  border-top-left-radius: var(--radius);
-  border-top-right-radius: var(--radius);
-  opacity: .16;
-  pointer-events: none;
-}
+
 .card:hover {
-  transform: translateY(-1px);
-  border-color: #cfe8dc;
-  background: color-mix(in oklab, var(--card), #000 2%);
-  box-shadow: 0 10px 28px rgba(0,0,0,.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+  border-color: #abccb8;
+  transform: translateY(-4px);
 }
-.card:focus-within {
-  outline: 2px solid var(--brand);
-  outline-offset: 2px;
-}
+
 .card h3 {
-  margin: 0 0 6px;
-  font-size: clamp(16px, 2vw, 18px);
+  font-weight: 700;
+  font-size: clamp(20px, 4vw, 22px);
+  margin: 0 0 8px;
   color: var(--text);
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: 12px;
 }
-/* 标题前置小圆点增强视觉层次 */
+
 .card h3::before {
   content: '';
-  width: 8px; height: 8px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: var(--brand);
-  box-shadow: 0 0 0 6px var(--brand-weak);
+  box-shadow: 0 0 0 8px var(--brand-weak);
 }
+
 .card p {
-  margin: 0;
   color: var(--text-weak);
-  font-size: 13px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.9;
+  margin: 0;
+  user-select: none;
 }
 
 @media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .actions {
+    flex-wrap: wrap;
+    gap: 14px;
+  }
   .feature-grid {
     grid-template-columns: 1fr 1fr;
   }
 }
-@media (max-width: 640px) {
+
+@media (max-width: 600px) {
   .feature-grid {
     grid-template-columns: 1fr;
+  }
+  .btn {
+    width: 100%;
+    justify-content: center;
   }
 }
 </style>

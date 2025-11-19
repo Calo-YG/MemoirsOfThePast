@@ -1,3 +1,4 @@
+using MemoirsOfThePast.HoST.Middlewares;
 using MemoirsOfThePast.HoST.Service.Auth;
 using MemoirsOfThePast.HoST.Service.Fragment;
 using MemoirsOfThePast.HoST.Service.Memory;
@@ -27,16 +28,15 @@ var configuration = builder.Configuration;
 var cors = "MemoirsOfThePast";
 
 builder.Services.Configure<LLMOptions>(builder.Configuration.GetSection(nameof(LLMOptions)));
-builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(nameof(JwtOptions)));
 builder.AddServiceDefaults();
 builder.Services.AddOpenApi();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(defaultScheme:JwtBearerConst.Scheme).AddJwtBearer(builder.Configuration);
 builder.Services.AddAuthorization();
-
+builder.Services.AddTransient<ExceptionMiddleware>();
 
 #region 最小api 模型验证
-builder.Services.AddValidation();
+//builder.Services.AddValidation();
 builder.Services.AddProblemDetails(ctx =>
 {
     ctx.CustomizeProblemDetails = context =>
@@ -67,7 +67,10 @@ AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
 builder.Services.AddDbContext<IDbContext, AppDbContext>((builder) =>
 {
     // 使用Npgsql作为数据库提供程序，并从配置中获取连接字符串
-    builder.UseNpgsql(configuration.GetConnectionString("DefaultConnection"), options =>
+
+    var conn = configuration.GetConnectionString("DefaultConnection");
+
+    builder.UseNpgsql(conn, options =>
     {
         // 此处可根据需要配置Npgsql选项
     });
@@ -129,6 +132,7 @@ builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IMemoryService, MemoryService>();
 builder.Services.AddTransient<IFragmentService, FragmentService>();
+builder.Services.AddScoped<IUserContext, UserContext>();
 #endregion 
 #region 配置agent
 
@@ -164,20 +168,22 @@ builder.Services.AddAIAgent(SqlGenerateExecutor.AgentName, (sp, s) =>
 #endregion
 var app = builder.Build();
 
+app.MapDefaultEndpoints();
+
 app.UseCors(cors);
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
     app.MapScalarApiReference(op =>
     {
-        op.WithTitle("SpeakEase.Gateway");
+        op.WithTitle("SpeakEase");
         op.WithTheme(ScalarTheme.Moon);
     });
     app.MapOpenApi();
 }
-
 app.UseAuthorization();
-app.MapDefaultEndpoints();
 
 // Configure the HTTP request pipeline.
 
@@ -309,5 +315,5 @@ FROM
 app.MapUser();
 app.MapAuth();
 app.MapFragment();
-
+app.MapMemory();
 await app.RunAsync();
