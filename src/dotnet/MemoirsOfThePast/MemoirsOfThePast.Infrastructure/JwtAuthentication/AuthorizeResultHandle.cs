@@ -18,7 +18,7 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
             //返回鉴权失败信息
             if (authorizeResult.Challenged)
             {
-                context!.Response.StatusCode = 401;
+                context!.Response.StatusCode = 200;
                 context.Response.ContentType = "application/json";
                 var response = ApiResult.Fail("Authentication failed, token invalid", 401);
                 await context.Response.WriteAsync(JsonSerializer.Serialize(response, options.Value.SerializerOptions));
@@ -33,7 +33,7 @@ namespace MemoirsOfThePast.Infrastructure.JwtAuthentication
 
                 _logger.LogWarning($"Authorization failed  with reason: {reason}");
 
-                context!.Response.StatusCode = 403;
+                context!.Response.StatusCode = 200;
                 context.Response.ContentType = "application/json";
                 var response = ApiResult.Fail(reason, 403);
                 await context.Response.WriteAsync(JsonSerializer.Serialize(response, options.Value.SerializerOptions));
