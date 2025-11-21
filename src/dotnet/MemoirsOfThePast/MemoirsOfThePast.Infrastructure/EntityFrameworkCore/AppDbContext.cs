@@ -21,6 +21,11 @@ namespace MemoirsOfThePast.Infrastructure.EntityFrameworkCore
         /// </summary>
         public DbSet<FragmentEntity> Fragments { get; set; }
 
+        /// <summary>
+        /// 对话记录
+        /// </summary>
+        public DbSet<ChatVectorMessageEntity> ChatVectorMessages { get; set; }
+
         private readonly IUserContext userContext;
         /// <summary>
         /// 构造函数

@@ -33,6 +33,5 @@
 	<ItemGroup>
 	  <Folder Include="AgentMiddleware\" />
 	  <Folder Include="Backgrounds\" />
-	  <Folder Include="Executors\" />
 	</ItemGroup>
 </Project>

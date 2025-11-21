@@ -21,6 +21,11 @@ public interface IDbContext
     public DbSet<FragmentEntity> Fragments { get; set; }
 
     /// <summary>
+    /// 对话记录
+    /// </summary>
+    public DbSet<ChatVectorMessageEntity> ChatVectorMessages { get; set; }
+
+    /// <summary>
     /// 迁移
     /// </summary>
     void Migrate();
